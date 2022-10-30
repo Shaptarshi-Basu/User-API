@@ -1,8 +1,8 @@
 package db
 
 import (
-	"api-proj/model"
 	"fmt"
+	"user-api/model"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -67,6 +67,9 @@ func (dbOps *DBOperationsImpl) UpdateUser(user model.User) (model.User, error) {
 	client := createDynDBClient()
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":f": {
+				S: aws.String(user.FirstName),
+			},
 			":l": {
 				S: aws.String(user.LastName),
 			},
@@ -79,12 +82,9 @@ func (dbOps *DBOperationsImpl) UpdateUser(user model.User) (model.User, error) {
 			"email": {
 				S: aws.String(user.Email),
 			},
-			"first_name": {
-				S: aws.String(user.FirstName),
-			},
 		},
 		ReturnValues:     aws.String("UPDATED_NEW"),
-		UpdateExpression: aws.String("set last_name = :l, address = :a"),
+		UpdateExpression: aws.String("set first_name = :f, last_name = :l, address = :a"),
 	}
 	_, err := client.UpdateItem(input)
 	if err != nil {

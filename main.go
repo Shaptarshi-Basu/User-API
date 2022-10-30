@@ -1,7 +1,7 @@
 package main
 
 import (
-	"api-proj/routes"
+	"user-api/routes"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )

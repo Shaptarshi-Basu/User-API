@@ -1,12 +1,12 @@
 package routes
 
 import (
-	mock "api-proj/mocks"
-	"api-proj/model"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
+	mock "user-api/mocks"
+	"user-api/model"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"

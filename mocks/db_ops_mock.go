@@ -1,8 +1,8 @@
 package mock
 
 import (
-	"api-proj/model"
 	"fmt"
+	"user-api/model"
 )
 
 type DBOperationsMock struct {

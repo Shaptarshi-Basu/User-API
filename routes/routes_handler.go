@@ -1,12 +1,12 @@
 package routes
 
 import (
-	"api-proj/db"
-	"api-proj/model"
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"user-api/db"
+	"user-api/model"
 
 	"github.com/aws/aws-lambda-go/events"
 )
@@ -48,7 +48,7 @@ func (oh *OpertionHandlers) createUser(req events.APIGatewayProxyRequest) (event
 	if err != nil {
 		return clientError(http.StatusInternalServerError, err)
 	}
-
+	fmt.Printf("%+v", userDetails)
 	err = validateUserDetails(userDetails)
 	if err != nil {
 		return clientError(http.StatusBadRequest, err)
