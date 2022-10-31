@@ -8,7 +8,7 @@ The REST API using AWS Lambda, API gateway and DynamoDB. It enable to create/upd
 
 ### Request
 
-`GET https://oiddgxkwij.execute-api.eu-north-1.amazonaws.com/test/users`
+`GET` https://oiddgxkwij.execute-api.eu-north-1.amazonaws.com/test/users
 
 ### Response
     - HTTP/1.1 200 StatusOk   
@@ -35,7 +35,7 @@ The REST API using AWS Lambda, API gateway and DynamoDB. It enable to create/upd
 
 ### Request
 
-`PUT https://oiddgxkwij.execute-api.eu-north-1.amazonaws.com/test/user`
+`PUT` https://oiddgxkwij.execute-api.eu-north-1.amazonaws.com/test/user
 
 ### Request
     {
