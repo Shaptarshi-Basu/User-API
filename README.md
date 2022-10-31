@@ -14,16 +14,16 @@ The REST API using AWS Lambda, API gateway and DynamoDB. It enable to create/upd
     - HTTP/1.1 200 StatusOk   
        [
             {
-                "email": "test@example.com", 
-                "first_name": "first name",
-                "subject_id": 1,
+                "email": "test1@example.com", 
+                "first_name": "first name1",
+                "last_name": "last name2",
+                "address": "real address1"
             }, 
             {
                 "email": "test2@example.com", 
                 "first_name": "first name2",
                 "last_name": "last name2",
-                "address": "real address2",
-                "subject_id": 2
+                "address": "real address2"
             }
         ]
     
