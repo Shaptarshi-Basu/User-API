@@ -7,7 +7,6 @@ terraform {
 }
 
 
-//Add  keys from the IAM user which would create.
 provider "aws" {
   region = "eu-north-1"
   access_key = ""
@@ -78,12 +77,6 @@ resource "aws_api_gateway_method" "getUsersMethod" {
    http_method   = "GET"
    authorization = "NONE"
 }
-resource "aws_api_gateway_method" "createUserMethod" {
-   rest_api_id   = aws_api_gateway_rest_api.apiLambda.id
-   resource_id   = aws_api_gateway_resource.resource2.id
-   http_method   = "POST"
-   authorization = "NONE"
-}
 resource "aws_api_gateway_method" "updateUserMethod" {
    rest_api_id   = aws_api_gateway_rest_api.apiLambda.id
    resource_id   = aws_api_gateway_resource.resource2.id
@@ -96,7 +89,7 @@ resource "aws_api_gateway_integration" "lambda-intgr-get" {
    resource_id = aws_api_gateway_method.getUsersMethod.resource_id
    http_method = aws_api_gateway_method.getUsersMethod.http_method
 
-   integration_http_method = "GET"
+   integration_http_method = "POST"
    type                    = "AWS_PROXY"
    uri                     = aws_lambda_function.terraform_lambda_func.invoke_arn
 }
@@ -108,31 +101,12 @@ resource "aws_api_gateway_integration" "lambda-intgr-put" {
    resource_id = aws_api_gateway_method.updateUserMethod.resource_id
    http_method = aws_api_gateway_method.updateUserMethod.http_method
 
-   integration_http_method = "PUT"
-   type                    = "AWS_PROXY"
-   uri                     = aws_lambda_function.terraform_lambda_func.invoke_arn
-}
-
-resource "aws_api_gateway_integration" "lambda-intgr-post" {
-   rest_api_id = aws_api_gateway_rest_api.apiLambda.id
-   resource_id = aws_api_gateway_method.createUserMethod.resource_id
-   http_method = aws_api_gateway_method.createUserMethod.http_method
-
    integration_http_method = "POST"
    type                    = "AWS_PROXY"
    uri                     = aws_lambda_function.terraform_lambda_func.invoke_arn
 }
 
-
-resource "aws_api_gateway_deployment" "apideploy" {
-   depends_on = [
-     aws_api_gateway_integration.lambda-intgr-post,
-   ]
-
-   rest_api_id = aws_api_gateway_rest_api.apiLambda.id
-   stage_name  = "test"
-}
-resource "aws_api_gateway_deployment" "apideploy2" {
+resource "aws_api_gateway_deployment" "api-deploy-put" {
    depends_on = [
      aws_api_gateway_integration.lambda-intgr-put,
    ]
@@ -140,7 +114,7 @@ resource "aws_api_gateway_deployment" "apideploy2" {
    rest_api_id = aws_api_gateway_rest_api.apiLambda.id
    stage_name  = "test"
 }
-resource "aws_api_gateway_deployment" "apideploy3" {
+resource "aws_api_gateway_deployment" "api-deploy-get" {
    depends_on = [
 
      aws_api_gateway_integration.lambda-intgr-get,
@@ -161,3 +135,4 @@ resource "aws_lambda_permission" "apigw" {
    # within the API Gateway REST API.
    source_arn = "${aws_api_gateway_rest_api.apiLambda.execution_arn}/*/*"
 }
+
