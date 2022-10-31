@@ -1,6 +1,6 @@
 # REST API
 
-The REST API for AWS Lambda. It enable to create/update and list users
+The REST API using AWS Lambda, API gateway and DynamoDB. It enable to create/update and list users
 
 ## Get list of users
 
