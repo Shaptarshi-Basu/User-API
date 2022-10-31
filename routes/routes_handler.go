@@ -20,10 +20,8 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	oh := OpertionHandlers{dbOps: &dbOps}
 	if req.HTTPMethod == "GET" && req.Path == "/users" {
 		return oh.fetchAllUsers()
-	} else if req.HTTPMethod == "POST" && req.Path == "/user" {
-		return oh.createUser(req)
 	} else if req.HTTPMethod == "PUT" && req.Path == "/user" {
-		return oh.updateUser(req)
+		return oh.putUser(req)
 	} else {
 		return clientError(http.StatusBadRequest, fmt.Errorf("Invalid Route, Method: %s and Path: %s", req.HTTPMethod, req.Path))
 	}
@@ -42,32 +40,8 @@ func (oh *OpertionHandlers) fetchAllUsers() (events.APIGatewayProxyResponse, err
 
 	return returnResponse(string(usersFetched))
 }
-func (oh *OpertionHandlers) createUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var userDetails model.User
-	err := json.Unmarshal([]byte(req.Body), &userDetails)
-	if err != nil {
-		return clientError(http.StatusInternalServerError, err)
-	}
-	fmt.Printf("%+v", userDetails)
-	err = validateUserDetails(userDetails)
-	if err != nil {
-		return clientError(http.StatusBadRequest, err)
-	}
 
-	user, err := oh.dbOps.CreateUser(userDetails)
-	if err != nil {
-		return clientError(http.StatusInternalServerError, err)
-	}
-
-	userCreated, err := json.Marshal(user)
-	if err != nil {
-		return clientError(http.StatusInternalServerError, err)
-	}
-
-	return returnResponse(string(userCreated))
-}
-
-func (oh *OpertionHandlers) updateUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (oh *OpertionHandlers) putUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var userDetails model.User
 	err := json.Unmarshal([]byte(req.Body), &userDetails)
 	if err != nil {

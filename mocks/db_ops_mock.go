@@ -17,9 +17,6 @@ func (dbOps *DBOperationsMock) FetchUsers() (users []model.User, err error) {
 func (dbOps *DBOperationsMock) UpdateUser(user model.User) (model.User, error) {
 	return user, nil
 }
-func (dbOps *DBOperationsMock) CreateUser(user model.User) (model.User, error) {
-	return user, nil
-}
 
 func (dbOpsFail *DBOperationsFailure) FetchUsers() (users []model.User, err error) {
 	fmt.Printf("List users")
@@ -27,7 +24,4 @@ func (dbOpsFail *DBOperationsFailure) FetchUsers() (users []model.User, err erro
 }
 func (dbOpsFail *DBOperationsFailure) UpdateUser(user model.User) (model.User, error) {
 	return model.User{}, fmt.Errorf("Couldn't update user")
-}
-func (dbOpsFail *DBOperationsFailure) CreateUser(user model.User) (model.User, error) {
-	return model.User{}, fmt.Errorf("Couldn't create user")
 }

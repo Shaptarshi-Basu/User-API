@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"user-api/model"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -12,7 +11,6 @@ import (
 
 type DBOperations interface {
 	FetchUsers() ([]model.User, error)
-	CreateUser(model.User) (model.User, error)
 	UpdateUser(model.User) (model.User, error)
 }
 
@@ -26,7 +24,7 @@ func createDynDBClient() *dynamodb.DynamoDB {
 	return dynamodb.New(session)
 }
 func (dbOps *DBOperationsImpl) FetchUsers() (users []model.User, err error) {
-	fmt.Printf("List users")
+	users = []model.User{}
 	client := createDynDBClient()
 	input := &dynamodb.ScanInput{
 		TableName: aws.String("User"),
@@ -43,27 +41,7 @@ func (dbOps *DBOperationsImpl) FetchUsers() (users []model.User, err error) {
 	}
 	return users, nil
 }
-func (dbOps *DBOperationsImpl) CreateUser(user model.User) (model.User, error) {
-
-	client := createDynDBClient()
-	userData, err := dynamodbattribute.MarshalMap(user)
-	if err != nil {
-		return model.User{}, err
-	}
-
-	input := &dynamodb.PutItemInput{
-		Item:      userData,
-		TableName: aws.String("User"),
-	}
-	_, err = client.PutItem(input)
-	if err != nil {
-		return model.User{}, err
-	}
-
-	return user, nil
-}
 func (dbOps *DBOperationsImpl) UpdateUser(user model.User) (model.User, error) {
-	fmt.Printf("Update user: %+v", user)
 	client := createDynDBClient()
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
