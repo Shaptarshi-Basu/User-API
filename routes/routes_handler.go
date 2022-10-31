@@ -52,7 +52,7 @@ func (oh *OpertionHandlers) putUser(req events.APIGatewayProxyRequest) (events.A
 		return clientError(http.StatusBadRequest, err)
 	}
 
-	user, err := oh.dbOps.UpdateUser(userDetails)
+	user, err := oh.dbOps.CreateOrUpdateUser(userDetails)
 	if err != nil {
 		return clientError(http.StatusInternalServerError, err)
 	}

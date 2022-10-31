@@ -11,7 +11,7 @@ import (
 
 type DBOperations interface {
 	FetchUsers() ([]model.User, error)
-	UpdateUser(model.User) (model.User, error)
+	CreateOrUpdateUser(model.User) (model.User, error)
 }
 
 type DBOperationsImpl struct {
@@ -41,7 +41,7 @@ func (dbOps *DBOperationsImpl) FetchUsers() (users []model.User, err error) {
 	}
 	return users, nil
 }
-func (dbOps *DBOperationsImpl) UpdateUser(user model.User) (model.User, error) {
+func (dbOps *DBOperationsImpl) CreateOrUpdateUser(user model.User) (model.User, error) {
 	client := createDynDBClient()
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
