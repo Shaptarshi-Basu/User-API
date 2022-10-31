@@ -1,13 +1,14 @@
 # REST API
 
-The REST API using AWS Lambda, API gateway and DynamoDB. It enable to create/update and list users
+The REST API using AWS Lambda, API gateway and DynamoDB. It enable to create/update and list users.
+
+
 
 ## Get list of users
 
 ### Request
 
-`GET /users`
-
+`GET https://oiddgxkwij.execute-api.eu-north-1.amazonaws.com/test/users`
 
 ### Response
     - HTTP/1.1 200 StatusOk   
@@ -34,7 +35,7 @@ The REST API using AWS Lambda, API gateway and DynamoDB. It enable to create/upd
 
 ### Request
 
-`PUT /user`
+`PUT https://oiddgxkwij.execute-api.eu-north-1.amazonaws.com/test/user`
 
 ### Request
     {
