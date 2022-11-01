@@ -122,3 +122,9 @@ endpoints and stored.
     ]
     }
 
+### TODO items
+-  Implement docker based tests for the db operations
+    https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html#docker
+- Add tests events to lambda
+- implement lambda based authorizer
+- upload zip to s3 and use s3 to upload zip to lambda
