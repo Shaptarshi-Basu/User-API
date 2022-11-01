@@ -6,7 +6,7 @@ terraform {
  }
 }
 
-
+//Use access and secret keys pertaining to the user
 provider "aws" {
   region = "eu-north-1"
   access_key = ""
@@ -39,14 +39,13 @@ resource "aws_iam_role_policy" "lambda_policy" {
   policy = file("policy.json")
 }
 
-
 resource "aws_iam_role" "role_for_LDC" {
   name = "myrole"
   assume_role_policy = file("assume_role_policy.json")
 
 }
 
-
+//Create lambda fromapi.zip file which should be present in the current directory. More details in the README file.
 resource "aws_lambda_function" "terraform_lambda_func" {
   filename      = "api.zip"
   function_name = "User_Api"
@@ -55,28 +54,37 @@ resource "aws_lambda_function" "terraform_lambda_func" {
   runtime       = "go1.x"
 }
 
-
+// Create api gatway
 resource "aws_api_gateway_rest_api" "apiLambda" {
   name        = "User-API"
 }
 
+
+// Create resource /users
 resource "aws_api_gateway_resource" "resource1" {
    rest_api_id = aws_api_gateway_rest_api.apiLambda.id
    parent_id   = aws_api_gateway_rest_api.apiLambda.root_resource_id
    path_part   = "users"
 }
+ 
+
+// Create resource /user 
 resource "aws_api_gateway_resource" "resource2" {
    rest_api_id = aws_api_gateway_rest_api.apiLambda.id
    parent_id   = aws_api_gateway_rest_api.apiLambda.root_resource_id
    path_part   = "user"
 }
 
+//create method GET /users
 resource "aws_api_gateway_method" "getUsersMethod" {
    rest_api_id   = aws_api_gateway_rest_api.apiLambda.id
    resource_id   = aws_api_gateway_resource.resource1.id
    http_method   = "GET"
    authorization = "NONE"
 }
+
+
+//create method PUT /user
 resource "aws_api_gateway_method" "updateUserMethod" {
    rest_api_id   = aws_api_gateway_rest_api.apiLambda.id
    resource_id   = aws_api_gateway_resource.resource2.id
@@ -84,6 +92,7 @@ resource "aws_api_gateway_method" "updateUserMethod" {
    authorization = "NONE"
 }
 
+//create trigger for lambda for GET /users
 resource "aws_api_gateway_integration" "lambda-intgr-get" {
    rest_api_id = aws_api_gateway_rest_api.apiLambda.id
    resource_id = aws_api_gateway_method.getUsersMethod.resource_id
@@ -96,6 +105,7 @@ resource "aws_api_gateway_integration" "lambda-intgr-get" {
 
 
 
+//create trigger for lambda for PUT /user
 resource "aws_api_gateway_integration" "lambda-intgr-put" {
    rest_api_id = aws_api_gateway_rest_api.apiLambda.id
    resource_id = aws_api_gateway_method.updateUserMethod.resource_id
@@ -114,6 +124,7 @@ resource "aws_api_gateway_deployment" "api-deploy-put" {
    rest_api_id = aws_api_gateway_rest_api.apiLambda.id
    stage_name  = "test"
 }
+ 
 resource "aws_api_gateway_deployment" "api-deploy-get" {
    depends_on = [
 
@@ -123,7 +134,6 @@ resource "aws_api_gateway_deployment" "api-deploy-get" {
    rest_api_id = aws_api_gateway_rest_api.apiLambda.id
    stage_name  = "test"
 }
-
 
 resource "aws_lambda_permission" "apigw" {
    statement_id  = "AllowAPIGatewayInvoke"
