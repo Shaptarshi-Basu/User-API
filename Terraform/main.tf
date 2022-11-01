@@ -45,7 +45,7 @@ resource "aws_iam_role" "role_for_LDC" {
 
 }
 
-//Create lambda fromapi.zip file which should be present in the current directory. More details in the README file.
+//Create lambda from api.zip file which should be present in the current directory. More details in the README file.
 resource "aws_lambda_function" "terraform_lambda_func" {
   filename      = "api.zip"
   function_name = "User_Api"
@@ -54,7 +54,7 @@ resource "aws_lambda_function" "terraform_lambda_func" {
   runtime       = "go1.x"
 }
 
-// Create api gatway
+// Create api gateway
 resource "aws_api_gateway_rest_api" "apiLambda" {
   name        = "User-API"
 }
