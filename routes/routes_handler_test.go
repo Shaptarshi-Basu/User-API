@@ -1,4 +1,4 @@
-package routes
+package routes_test
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 	"testing"
 	mock "user-api/mocks"
 	"user-api/model"
+	"user-api/routes"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
@@ -14,10 +15,10 @@ import (
 
 func TestPutUser(t *testing.T) {
 	dbOps := mock.DBOperationsMock{}
-	oh := OpertionHandlers{dbOps: &dbOps}
+	oh := routes.OpertionHandlers{DbOps: &dbOps}
 	testUser := model.User{Email: "mockmail@gmail.com", FirstName: "SomeName", LastName: "SomeLAstName", Address: "SomeAddress"}
 	reqbody, _ := json.Marshal(testUser)
-	res, err := oh.putUser(events.APIGatewayProxyRequest{Body: string(reqbody)})
+	res, err := oh.PutUser(events.APIGatewayProxyRequest{Body: string(reqbody)})
 	var expectedUser model.User
 	json.Unmarshal([]byte(res.Body), &expectedUser)
 	assert.Equal(t, testUser, expectedUser)
@@ -27,10 +28,10 @@ func TestPutUser(t *testing.T) {
 
 func TestPutUserFail_Mandatory_Params_Missing(t *testing.T) {
 	dbOps := mock.DBOperationsMock{}
-	oh := OpertionHandlers{dbOps: &dbOps}
+	oh := routes.OpertionHandlers{DbOps: &dbOps}
 	testUser := model.User{Email: "", FirstName: "SomeName", LastName: "SomeLAstName", Address: "SomeAddress"}
 	reqbody, _ := json.Marshal(testUser)
-	res, err := oh.putUser(events.APIGatewayProxyRequest{Body: string(reqbody)})
+	res, err := oh.PutUser(events.APIGatewayProxyRequest{Body: string(reqbody)})
 	var expectedUser model.User
 	json.Unmarshal([]byte(res.Body), &expectedUser)
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
@@ -40,10 +41,10 @@ func TestPutUserFail_Mandatory_Params_Missing(t *testing.T) {
 
 func TestPutUserFail_DB_operations_Failure(t *testing.T) {
 	dbOps := mock.DBOperationsFailure{}
-	oh := OpertionHandlers{dbOps: &dbOps}
+	oh := routes.OpertionHandlers{DbOps: &dbOps}
 	testUser := model.User{Email: "someEmail@gmail.com", FirstName: "SomeName", LastName: "SomeLAstName", Address: "SomeAddress"}
 	reqbody, _ := json.Marshal(testUser)
-	res, err := oh.putUser(events.APIGatewayProxyRequest{Body: string(reqbody)})
+	res, err := oh.PutUser(events.APIGatewayProxyRequest{Body: string(reqbody)})
 	var expectedUser model.User
 	json.Unmarshal([]byte(res.Body), &expectedUser)
 	assert.Equal(t, http.StatusInternalServerError, res.StatusCode)
@@ -52,8 +53,8 @@ func TestPutUserFail_DB_operations_Failure(t *testing.T) {
 }
 func TestFetchAllUsersSuccessFully(t *testing.T) {
 	dbOps := mock.DBOperationsMock{}
-	oh := OpertionHandlers{dbOps: &dbOps}
-	res, err := oh.fetchAllUsers()
+	oh := routes.OpertionHandlers{DbOps: &dbOps}
+	res, err := oh.FetchAllUsers()
 	var expectedUsrs []model.User
 	testUser := model.User{Email: "mockmail@gmail.com", FirstName: "SomeName", LastName: "SomeLAstName", Address: "SomeAddress"}
 	json.Unmarshal([]byte(res.Body), &expectedUsrs)

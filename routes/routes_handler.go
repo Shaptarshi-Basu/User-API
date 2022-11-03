@@ -12,23 +12,23 @@ import (
 )
 
 type OpertionHandlers struct {
-	dbOps db.DBOperations
+	DbOps db.DBOperations
 }
 
 func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	dbOps := db.DBOperationsImpl{}
-	oh := OpertionHandlers{dbOps: &dbOps}
+	oh := OpertionHandlers{DbOps: &dbOps}
 	if req.HTTPMethod == "GET" && req.Path == "/users" {
-		return oh.fetchAllUsers()
+		return oh.FetchAllUsers()
 	} else if req.HTTPMethod == "PUT" && req.Path == "/user" {
-		return oh.putUser(req)
+		return oh.PutUser(req)
 	} else {
 		return clientError(http.StatusBadRequest, fmt.Errorf("Invalid Route, Method: %s and Path: %s", req.HTTPMethod, req.Path))
 	}
 }
 
-func (oh *OpertionHandlers) fetchAllUsers() (events.APIGatewayProxyResponse, error) {
-	users, err := oh.dbOps.FetchUsers()
+func (oh *OpertionHandlers) FetchAllUsers() (events.APIGatewayProxyResponse, error) {
+	users, err := oh.DbOps.FetchUsers()
 	if err != nil {
 		return clientError(http.StatusInternalServerError, err)
 	}
@@ -41,7 +41,7 @@ func (oh *OpertionHandlers) fetchAllUsers() (events.APIGatewayProxyResponse, err
 	return returnResponse(string(usersFetched))
 }
 
-func (oh *OpertionHandlers) putUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (oh *OpertionHandlers) PutUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var userDetails model.User
 	err := json.Unmarshal([]byte(req.Body), &userDetails)
 	if err != nil {
@@ -52,7 +52,7 @@ func (oh *OpertionHandlers) putUser(req events.APIGatewayProxyRequest) (events.A
 		return clientError(http.StatusBadRequest, err)
 	}
 
-	user, err := oh.dbOps.CreateOrUpdateUser(userDetails)
+	user, err := oh.DbOps.CreateOrUpdateUser(userDetails)
 	if err != nil {
 		return clientError(http.StatusInternalServerError, err)
 	}
