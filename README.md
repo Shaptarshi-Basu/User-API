@@ -8,7 +8,7 @@ Rest API implmentation using AWS Lambda, API gateway and DynamoDB. It enable to 
 
 ### Request
 
-`GET` https://oiddgxkwij.execute-api.eu-north-1.amazonaws.com/test/users
+`GET` /users
 
 ### Response
     - HTTP/1.1 200 StatusOk   
@@ -35,7 +35,7 @@ Rest API implmentation using AWS Lambda, API gateway and DynamoDB. It enable to 
 
 ### Request
 
-`PUT` https://oiddgxkwij.execute-api.eu-north-1.amazonaws.com/test/user
+`PUT` /user
 
 ### Request
     {
