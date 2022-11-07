@@ -67,9 +67,9 @@ func (oh *OpertionHandlers) PutUser(req events.APIGatewayProxyRequest) (events.A
 
 func validateUserDetails(user model.User) (err error) {
 	if user.Email == "" {
-		err = fmt.Errorf("Email is a required field and cannot be emoty in the request")
+		err = fmt.Errorf("Email is a required field and cannot be empty in the request")
 	} else if user.FirstName == "" {
-		err = fmt.Errorf("FirstName is a required field and cannot be emoty in the request")
+		err = fmt.Errorf("FirstName is a required field and cannot be empty in the request")
 	}
 	return err
 }
